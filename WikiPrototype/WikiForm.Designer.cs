@@ -311,6 +311,7 @@
             this.Controls.Add(this.addBtn);
             this.Name = "WikiForm";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WikiForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.statStrip.ResumeLayout(false);
             this.statStrip.PerformLayout();

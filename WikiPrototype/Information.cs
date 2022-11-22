@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-public class Information : IComparable<Information> //,IComparer<Information>
+public class Information : IComparable<Information> // implements IComparable interface and has four class variables Name, Catagory, Structure, Definition
 {
     private String Name;
     private String Category;
@@ -9,7 +9,7 @@ public class Information : IComparable<Information> //,IComparer<Information>
     private String Definition;
 
 
-    public Information(string name, string category, string structure, string definition)
+    public Information(string name, string category, string structure, string definition) //main constructor sets the values for every field
     {
         Name = name;
         Category = category;
@@ -17,7 +17,7 @@ public class Information : IComparable<Information> //,IComparer<Information>
         Definition = definition;
     }
 
-    public Information(string name)
+    public Information(string name) //name constructor main purpose is for working with the binary search method.
     {
         this.Name = name;
         this.Category = "";
@@ -25,7 +25,7 @@ public class Information : IComparable<Information> //,IComparer<Information>
         this.Definition = "";
     }
 
-    public int CompareTo(Information other)
+    public int CompareTo(Information other) //overloaded CompareTo method for sort.
     {
         if (other != null)
         {

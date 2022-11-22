@@ -17,20 +17,20 @@ namespace WikiPrototype
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e) //on load set index to 0 and call comboboxpopulate()
         {
             index = 0;
             comboBoxPopulate();
         }
-        private void comboBoxPopulate()
+        private void comboBoxPopulate() //populate combobox with the string feilds in catagories.txt
         {
             String directory = Directory.GetCurrentDirectory();
             CataCCombo.Items.AddRange(File.ReadAllLines(directory + "\\Catagories.txt"));
         }
 
-        //reads text boxes and adds them to the array then clears the textboxes and calls the display method.
+        
 
-        private void add()
+        private void add() //reads the input feilds and adds them to the wiki list. will also call spechar() and linnolin() in constructor.
         {
             if (nameBox.Text.Length != 0 & String.IsNullOrEmpty(CataCCombo.Text))
             {
@@ -57,14 +57,14 @@ namespace WikiPrototype
 
         }
 
-        public bool ValidName(String name) 
+        public bool ValidName(String name) //valid name checks to see if the name exiists inside the list and returns a boolean based on the result
         {
 
             return wiki.Exists(x =>x.name == name);
             
         }
 
-        public String spechar(String unfiltered)
+        public String spechar(String unfiltered) //method replaces the string if there are any special characters with "" effectively filtering them.
         {
             String filtered = Regex.Replace(unfiltered, @"[^0-9a-zA-Z]+", ""); ;
             return filtered;
@@ -85,7 +85,7 @@ namespace WikiPrototype
         }
 
         //sorts all of the items, then displays them in the list view box.
-        private void display()
+        private void display() // uses new compareto from information with wiki.sort to sort list then display the data
         {
             wiki.Sort();
             viewBox.Items.Clear();
@@ -163,7 +163,7 @@ namespace WikiPrototype
 
         //(String.Compare(i, j, StringComparison.OrdinalIgnoreCase) < 0)
 
-        private int binSearch2(String target) 
+        private int binSearch2(String target)  //new binary search method uses inbuilt binary search method and returns the index of the search.
         {
             if (wiki.BinarySearch(new Information(target)) > 0)
             {
@@ -178,7 +178,7 @@ namespace WikiPrototype
 
        
 
-        private void Open() //open creats a file open dialog. if successful then it will open the selected file and read the contents into the array. it will also update the index
+        private void Open() //open creats a file open dialog. if successful then it will open the selected file and read the contents into the object list. it will also update the index
         {
             wiki.Clear();
             index = 0;
@@ -430,7 +430,7 @@ namespace WikiPrototype
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            //okay dookaye
+            //okay dookay
         }
 
         private void nameBox_TextChanged(object sender, EventArgs e)
@@ -441,6 +441,11 @@ namespace WikiPrototype
         private void NLinBtn_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void WikiForm_FormClosing(object sender, FormClosingEventArgs e) //calls save method on close.
+        {
+            save();
         }
     }
 }
