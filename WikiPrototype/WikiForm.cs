@@ -32,10 +32,10 @@ namespace WikiPrototype
 
         private void add() //reads the input feilds and adds them to the wiki list. will also call spechar() and linnolin() in constructor.
         {
-            if (nameBox.Text.Length != 0 & String.IsNullOrEmpty(CataCCombo.Text))
+            if (!String.IsNullOrEmpty(nameBox.Text) & !String.IsNullOrEmpty(CataCCombo.Text))
             {
 
-                if (ValidName(nameBox.Text) == true)
+                if (ValidName(nameBox.Text) == false)
                 {
 
                     wiki.Add(new Information(spechar(nameBox.Text), CataCCombo.Text, linnolin(), spechar(defBox.Text)));
@@ -78,7 +78,6 @@ namespace WikiPrototype
         private void clearText()
         {
             nameBox.Clear();
-            CataCCombo.Items.Clear();
             LinBtn.Checked = false;
             NLinBtn.Checked = false;
             defBox.Clear();
@@ -175,8 +174,6 @@ namespace WikiPrototype
             }
 
         }
-
-       
 
         private void Open() //open creats a file open dialog. if successful then it will open the selected file and read the contents into the object list. it will also update the index
         {
@@ -421,11 +418,6 @@ namespace WikiPrototype
                 delete();
             }
             
-        }
-
-        private void test()
-        {
-            //okay asdasdasd
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
