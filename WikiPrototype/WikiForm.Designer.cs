@@ -1,6 +1,6 @@
 ﻿namespace WikiPrototype
 {
-    partial class Form1
+    partial class WikiForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -36,10 +36,8 @@
             this.openBtn = new System.Windows.Forms.Button();
             this.nameBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.cataBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.strucBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.defBox = new System.Windows.Forms.TextBox();
             this.statBox = new System.Windows.Forms.TextBox();
@@ -52,10 +50,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.statStrip = new System.Windows.Forms.StatusStrip();
             this.statStripLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.LinBtn = new System.Windows.Forms.RadioButton();
+            this.NLinBtn = new System.Windows.Forms.RadioButton();
+            this.CataCCombo = new System.Windows.Forms.ComboBox();
+            this.groupBox = new System.Windows.Forms.GroupBox();
             this.statStrip.SuspendLayout();
+            this.groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // addBtn
@@ -124,6 +124,7 @@
             this.nameBox.Name = "nameBox";
             this.nameBox.Size = new System.Drawing.Size(204, 23);
             this.nameBox.TabIndex = 9;
+            this.nameBox.TextChanged += new System.EventHandler(this.nameBox_TextChanged);
             this.nameBox.DoubleClick += new System.EventHandler(this.nameDClick);
             // 
             // label1
@@ -134,13 +135,6 @@
             this.label1.Size = new System.Drawing.Size(39, 15);
             this.label1.TabIndex = 10;
             this.label1.Text = "Name";
-            // 
-            // cataBox
-            // 
-            this.cataBox.Location = new System.Drawing.Point(73, 134);
-            this.cataBox.Name = "cataBox";
-            this.cataBox.Size = new System.Drawing.Size(204, 23);
-            this.cataBox.TabIndex = 11;
             // 
             // label2
             // 
@@ -159,13 +153,6 @@
             this.label3.Size = new System.Drawing.Size(55, 15);
             this.label3.TabIndex = 13;
             this.label3.Text = "Structure";
-            // 
-            // strucBox
-            // 
-            this.strucBox.Location = new System.Drawing.Point(73, 192);
-            this.strucBox.Name = "strucBox";
-            this.strucBox.Size = new System.Drawing.Size(204, 23);
-            this.strucBox.TabIndex = 14;
             // 
             // label4
             // 
@@ -255,45 +242,56 @@
             this.statStripLabel.Spring = true;
             this.statStripLabel.Text = "toolStripStatusLabel1";
             // 
-            // comboBox1
+            // LinBtn
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(318, 329);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 23);
-            this.comboBox1.TabIndex = 22;
+            this.LinBtn.AutoSize = true;
+            this.LinBtn.Location = new System.Drawing.Point(6, 14);
+            this.LinBtn.Name = "LinBtn";
+            this.LinBtn.Size = new System.Drawing.Size(57, 19);
+            this.LinBtn.TabIndex = 23;
+            this.LinBtn.TabStop = true;
+            this.LinBtn.Text = "Linear";
+            this.LinBtn.UseVisualStyleBackColor = true;
+            this.LinBtn.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
-            // radioButton1
+            // NLinBtn
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(146, 105);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(94, 19);
-            this.radioButton1.TabIndex = 23;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "radioButton1";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.NLinBtn.AutoSize = true;
+            this.NLinBtn.Location = new System.Drawing.Point(111, 14);
+            this.NLinBtn.Name = "NLinBtn";
+            this.NLinBtn.Size = new System.Drawing.Size(83, 19);
+            this.NLinBtn.TabIndex = 24;
+            this.NLinBtn.TabStop = true;
+            this.NLinBtn.Text = "Non Linear";
+            this.NLinBtn.UseVisualStyleBackColor = true;
+            this.NLinBtn.CheckedChanged += new System.EventHandler(this.NLinBtn_CheckedChanged);
             // 
-            // radioButton2
+            // CataCCombo
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(153, 161);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(94, 19);
-            this.radioButton2.TabIndex = 24;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "radioButton2";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.CataCCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CataCCombo.FormattingEnabled = true;
+            this.CataCCombo.Location = new System.Drawing.Point(73, 134);
+            this.CataCCombo.Name = "CataCCombo";
+            this.CataCCombo.Size = new System.Drawing.Size(204, 23);
+            this.CataCCombo.TabIndex = 25;
             // 
-            // Form1
+            // groupBox
+            // 
+            this.groupBox.Controls.Add(this.LinBtn);
+            this.groupBox.Controls.Add(this.NLinBtn);
+            this.groupBox.Location = new System.Drawing.Point(77, 183);
+            this.groupBox.Name = "groupBox";
+            this.groupBox.Size = new System.Drawing.Size(200, 39);
+            this.groupBox.TabIndex = 26;
+            this.groupBox.TabStop = false;
+            // 
+            // WikiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.radioButton2);
-            this.Controls.Add(this.radioButton1);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.groupBox);
+            this.Controls.Add(this.CataCCombo);
             this.Controls.Add(this.statStrip);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.seaBox);
@@ -301,10 +299,8 @@
             this.Controls.Add(this.statBox);
             this.Controls.Add(this.defBox);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.strucBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.cataBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.nameBox);
             this.Controls.Add(this.openBtn);
@@ -313,11 +309,13 @@
             this.Controls.Add(this.delBtn);
             this.Controls.Add(this.ediBtn);
             this.Controls.Add(this.addBtn);
-            this.Name = "Form1";
+            this.Name = "WikiForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.statStrip.ResumeLayout(false);
             this.statStrip.PerformLayout();
+            this.groupBox.ResumeLayout(false);
+            this.groupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -332,10 +330,8 @@
         private Button openBtn;
         private TextBox nameBox;
         private Label label1;
-        private TextBox cataBox;
         private Label label2;
         private Label label3;
-        private TextBox strucBox;
         private Label label4;
         private TextBox defBox;
         private TextBox statBox;
@@ -348,8 +344,9 @@
         private Label label5;
         private StatusStrip statStrip;
         private ToolStripStatusLabel statStripLabel;
-        private ComboBox comboBox1;
-        private RadioButton radioButton1;
-        private RadioButton radioButton2;
+        private RadioButton LinBtn;
+        private RadioButton NLinBtn;
+        private ComboBox CataCCombo;
+        private GroupBox groupBox;
     }
 }

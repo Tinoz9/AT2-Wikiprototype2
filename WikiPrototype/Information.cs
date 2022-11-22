@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 
-public class Information : IComparable<Information>, //IComparer<Information>
+public class Information : IComparable<Information> //,IComparer<Information>
 {
     private String Name;
     private String Category;
     private String Structure;
     private String Definition;
+
 
     public Information(string name, string category, string structure, string definition)
     {
@@ -16,12 +17,19 @@ public class Information : IComparable<Information>, //IComparer<Information>
         Definition = definition;
     }
 
-
-    public int CompareTo(Information name)
+    public Information(string name)
     {
-        if (name != null)
+        this.Name = name;
+        this.Category = "";
+        this.Structure = "";
+        this.Definition = "";
+    }
+
+    public int CompareTo(Information other)
+    {
+        if (other != null)
         {
-            return name.Name.CompareTo(this.Name);
+            return this.Name.CompareTo(other.Name);
         } else
         {
             

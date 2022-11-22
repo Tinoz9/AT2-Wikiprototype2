@@ -2,42 +2,48 @@ namespace WikiPrototype
 {
     using System.Text.RegularExpressions;
 
-    public partial class Form1 : Form
+    public partial class WikiForm : Form
     {
         //create two dimensional array, index, and filename global variables
-        List<Information> wiki = new List<Information>();
+        List<Information> wiki = new List<Information>(12);
 
         //static String[,] dataInfo = new String[12,4];
         static int index;
         String fileName;
 
-        public Form1()
+        public WikiForm()
         {
             InitializeComponent();
-
-
 
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             index = 0;
+            comboBoxPopulate();
+        }
+        private void comboBoxPopulate()
+        {
+            String directory = Directory.GetCurrentDirectory();
+            CataCCombo.Items.AddRange(File.ReadAllLines(directory + "\\Catagories.txt"));
         }
 
         //reads text boxes and adds them to the array then clears the textboxes and calls the display method.
 
         private void add()
         {
-            
-            if (nameBox.Text.Length != 0 & cataBox.Text.Length != 0 & strucBox.Text.Length != 0)
+            if (nameBox.Text.Length != 0 & String.IsNullOrEmpty(CataCCombo.Text))
             {
-                if (binSearch(nameBox.Text) == -1)
+
+                if (ValidName(nameBox.Text) == true)
                 {
-                    Information info1 = new Information(spechar(nameBox.Text), spechar(cataBox.Text), spechar(strucBox.Text), spechar(defBox.Text));
+
+                    wiki.Add(new Information(spechar(nameBox.Text), CataCCombo.Text, linnolin(), spechar(defBox.Text)));
 
                     index++;
                     clearText();
                     display();
+                    statStripLabel.Text = "item added";
                 }
                 else
                 {
@@ -48,7 +54,14 @@ namespace WikiPrototype
             {
                 statStripLabel.Text = "data is empty";
             }
-            statStripLabel.Text = "item added";
+
+        }
+
+        public bool ValidName(String name) 
+        {
+
+            return wiki.Exists(x =>x.name == name);
+            
         }
 
         public String spechar(String unfiltered)
@@ -65,15 +78,16 @@ namespace WikiPrototype
         private void clearText()
         {
             nameBox.Clear();
-            cataBox.Clear();
-            strucBox.Clear();
+            CataCCombo.Items.Clear();
+            LinBtn.Checked = false;
+            NLinBtn.Checked = false;
             defBox.Clear();
         }
 
         //sorts all of the items, then displays them in the list view box.
         private void display()
         {
-            sort();
+            wiki.Sort();
             viewBox.Items.Clear();
             int x = wiki.Count;
             try
@@ -99,22 +113,26 @@ namespace WikiPrototype
 
         private void edit() //edits an existing records from the array from the input in the textboxes then calls the display method.
         {
-             
+
             if (viewBox.SelectedIndices.Count != 0)
             {
                 int temp = viewBox.SelectedIndices[0];
                 if (!String.IsNullOrEmpty(nameBox.Text))
                 {
                     wiki[temp].name = nameBox.Text;
-                    
+
                 };
-                if (!String.IsNullOrEmpty(cataBox.Text))
+                if (!String.IsNullOrEmpty(CataCCombo.Text))
                 {
-                    wiki[temp].name = cataBox.Text;
+                    wiki[temp].name = CataCCombo.Text;
                 }
-                if (!String.IsNullOrEmpty(strucBox.Text))
+                if (LinBtn.Checked == true)
                 {
-                    wiki[temp].name = strucBox.Text;
+                    wiki[temp].name = "Linear";
+                }
+                else
+                {
+                    wiki[temp].name = "Non Linear";
                 }
                 if (!String.IsNullOrEmpty(defBox.Text))
                 {
@@ -123,30 +141,6 @@ namespace WikiPrototype
             }
             display();
         }
-
-        private void sort() //sorts the two dimensional array by comparing then names in alphabetical order. when it determines the alphabetical order it will call the swap method to swap the records.
-        {
-            bool sorted;
-            do
-            {
-                sorted = true;
-                for (int i = 0; i < wiki.Count - 1; i++)
-                {
-                    int j = i + 1;
-                    if (!string.IsNullOrEmpty(wiki[j].name))
-                    {
-                        if (wiki[i].name.CompareTo(wiki[j].name) > 0)
-                        {
-                            swap(i, j);
-                            sorted = false;
-                        }
-                    } else
-                    { 
-                        break;
-                    }
-                }
-            } while (sorted == false);
-        } 
 
 
         private void swap(int i, int j) //receives the two variables too swap then swapps the positions of x and y.
@@ -169,40 +163,31 @@ namespace WikiPrototype
 
         //(String.Compare(i, j, StringComparison.OrdinalIgnoreCase) < 0)
 
-        private int binSearch(String Target) //sorts the array then performs a binary search. if the item is found it will call the select method 
+        private int binSearch2(String target) 
         {
-            int bin = -1;
-            sort();
-
-            int high = index - 1;
-            int low = 0;
-
-            while (low <= high)
+            if (wiki.BinarySearch(new Information(target)) > 0)
             {
-                int mid = (low + high) / 2;
-                if (String.Compare(wiki[mid].name, Target, StringComparison.OrdinalIgnoreCase) == 0)
-                {
-
-                    bin = mid;
-                    return bin;
-                }
-                else if (String.Compare(wiki[mid].name, Target, StringComparison.OrdinalIgnoreCase) < 0)
-                {
-                    low = mid + 1;
-                }
-                else
-                {
-                    high = mid - 1;
-                }
-
+                int index = wiki.BinarySearch(new Information(target));
+                return index;
+            } else
+            {
+                return -1;
             }
-            return bin;
 
         }
 
+       
+
         private void Open() //open creats a file open dialog. if successful then it will open the selected file and read the contents into the array. it will also update the index
         {
+            wiki.Clear();
+            index = 0;
             int xindex = 0;
+            String wikiname = "";
+            String wikicata = "";
+            String wikistru = "";
+            String wikidefi = "";
+
             OpenFileDialog ofd = new OpenFileDialog()
             {
                 Filter = "Data File|*.dat;"
@@ -223,10 +208,11 @@ namespace WikiPrototype
                         }
                         if (fileStream.CanRead)
                         {
-                            wiki[xindex].name = binFileRead.ReadString();
-                            wiki[xindex].category = binFileRead.ReadString();
-                            wiki[xindex].structure = binFileRead.ReadString();
-                            wiki[xindex].definition = binFileRead.ReadString();
+                            wikiname = binFileRead.ReadString();
+                            wikicata = binFileRead.ReadString();
+                            wikistru = binFileRead.ReadString();
+                            wikidefi = binFileRead.ReadString();
+                            wiki.Add(new Information(wikiname, wikicata, wikistru, wikidefi));
                         }
 
                     }
@@ -324,23 +310,58 @@ namespace WikiPrototype
             }
         }
 
-        private void select() //gets the data at the selected index and then reads the data into the text boxes.
+        private void select() //gets the data at the selected index and then reads the data into the text boxes. calls highlin method
         {
             int nselect = viewBox.SelectedIndices[0];
             nameBox.Text = wiki[nselect].name;
-            cataBox.Text = wiki[nselect].category;
-            strucBox.Text = wiki[nselect].structure;
+            CataCCombo.SelectedItem = wiki[nselect].category;
+            if (wiki[nselect].structure == "Linear")
+            {
+                highlin(0);
+            }
+            else if (wiki[nselect].structure == "Non Linear")
+            {
+                highlin(1);
+            } else
+            {
+                highlin(2);
+            }
             defBox.Text = wiki[nselect].definition;
         }
 
-        private void seaBtn_Click(object sender, EventArgs e)
+        private String linnolin() //returns text of radio button
         {
-            for (int i = 0; i < wiki.Count; i++)
+            String lin = "Linear";
+            foreach (RadioButton r in groupBox.Controls)
             {
-                //statStripLabel.Text = wiki.BinarySearch(wiki[i].name, seaBox.Text);
+                if (r.Checked)
+                {
+                    lin =  r.Text;
+                } 
             }
-            
-            int result = binSearch(seaBox.Text);
+            return lin;
+        }
+
+        private void highlin(int index) //recieves index then selects according radio button checked
+        {
+            if (index == 0)
+            {
+                LinBtn.Checked = true;
+                NLinBtn.Checked = false;
+            } else if (index == 1)
+            {
+                LinBtn.Checked = false;
+                NLinBtn.Checked = true;
+            } else
+            {
+                LinBtn.Checked = false;
+                NLinBtn.Checked = false;
+            }
+        }
+
+        private void seaBtn_Click(object sender, EventArgs e) //searches with inbuilt binary search method then selects
+        {
+            int result = binSearch2(seaBox.Text);
             if (result != -1)
             {
                 viewBox.Items[result].Selected = true;
@@ -348,11 +369,12 @@ namespace WikiPrototype
             }
 
         }
-        private void clear() //clears the text boxes.
+        private void clear() //clears the text boxes and radio buttons.
         {
             nameBox.Text = "";
-            cataBox.Text = "";
-            strucBox.Text = "";
+            CataCCombo.Text = "";
+            LinBtn.Checked = false;
+            NLinBtn.Checked = false;
             defBox.Text = "";
         }
         private void nameDClick(object sender, EventArgs e)
@@ -409,6 +431,16 @@ namespace WikiPrototype
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             //okay dookaye
+        }
+
+        private void nameBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void NLinBtn_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
